@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8206011464483367828}
   - component: {fileID: 4799362485881182801}
   - component: {fileID: 828857071034719811}
+  - component: {fileID: 2583747214558709810}
   m_Layer: 0
   m_Name: SimpleBullet
   m_TagString: Untagged
@@ -73,6 +74,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &2583747214558709810
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094402925649190924}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.019999996, y: 0.06, z: 0.019999996}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7771772281233480484
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +106,6 @@ GameObject:
   - component: {fileID: 6958396887147102622}
   - component: {fileID: 6286720031075683899}
   - component: {fileID: 8131844816172071665}
-  - component: {fileID: 186076607491288411}
   m_Layer: 0
   m_Name: foamBulletB
   m_TagString: Untagged
@@ -158,24 +179,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &186076607491288411
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7771772281233480484}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.019999996, y: 0.06, z: 0.019999996}
-  m_Center: {x: 0, y: 0, z: 0}

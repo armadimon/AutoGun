@@ -69,28 +69,11 @@ public class PlayerController : BaseController
     // 플레이어 감지 및 배회 관련 업데이트
     protected override void PassiveUpdate()
     {
-        // 현재 위치에서 경로를 미리 계산
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
 
         if (colliders.Length > 0)
         {
-            float minDistance = float.MaxValue;
-
-            foreach (Collider collider in colliders)
-            {
-                float distance = Vector3.Distance(transform.position, collider.transform.position);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestEnemy = collider.transform;
-                    targetDistance = Mathf.Abs(transform.position.magnitude - closestEnemy.position.magnitude);
-                }
-            }
-
-            if (closestEnemy != null)
-            {
                 aiState = AIState.Attacking;
-            }
         }
     }
 
@@ -118,6 +101,29 @@ public class PlayerController : BaseController
 
     protected override void AttackingUpdate()
     {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
+
+        if (colliders.Length > 0)
+        {
+            float minDistance = float.MaxValue;
+
+            foreach (Collider collider in colliders)
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestEnemy = collider.transform;
+                    targetDistance = Mathf.Abs(transform.position.magnitude - closestEnemy.position.magnitude);
+                }
+            }
+
+            if (closestEnemy != null)
+            {
+                transform.LookAt(closestEnemy.transform);
+            }
+        }
+        
         if (targetDistance < attackDistance)
         {
             agent.isStopped = true;
