@@ -22,6 +22,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        other.gameObject.GetComponent<ResourceController>()?.ChangeHealth(-10);
         ProjectilePool.Instance.ReturnProjectile(this.gameObject);
     }
 }
