@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SubmachineGun : Weapon
 {
-    public GameObject chainSkill;  // 인스펙터에서 할당된 체인 스킬 프리팹
+    public GameObject chainSkill;
 
     private void Start()
     {
@@ -25,6 +25,8 @@ public class SubmachineGun : Weapon
         {
             Debug.Log("ISkill component found!");
             data.allSkills[0] = temp;  // 스킬 할당
+            Debug.Log(data.allSkills[0].SkillIcon);
+            InventoryManager.Instance.EquipWeapon(data);
         }
     }
 }

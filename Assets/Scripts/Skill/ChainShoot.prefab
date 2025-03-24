@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc6f9ad11f9834428f7d1c39292c83d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chainShotPrefab: {fileID: 2896382093698350344}
+  _skillIcon: {fileID: 7504479419409390260, guid: 139896ae9c7105140bf96a66f05e1c40, type: 3}
   numberOfChainBullets: 3
   attackDelay: 0.2

@@ -2,14 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChainShoot : MonoBehaviour, ISkill
 {
     public String SkillName { get; set; }
+    [SerializeField]
+    private Sprite _skillIcon;
+    public Sprite SkillIcon {get{return _skillIcon;} set{_skillIcon = value;}}
     public float CoolDown { get; set; }
     public int numberOfChainBullets = 5; // 체인 탄환 수
     public float attackDelay = 0.2f; // 각 공격 사이의 딜레이 시간
     private int currentBullet = 0;
+
+    public void Start()
+    {
+        Debug.Log(SkillIcon);
+    }
 
     public void Activate()
     {

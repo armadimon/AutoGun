@@ -15,14 +15,6 @@ public class HUD : MonoBehaviour
     private float MaxHP;
     private float CurrentHp;
 
-    private void Start()
-    {
-        Debug.Log(MaxHP);
-        Debug.Log(CurrentHp);
-        Debug.Log(CurrentHp / MaxHP);
-        // playerStatHandler = player.GetComponent<StatHandler>();
-    }
-
     private void LateUpdate()
     {
         switch (uitype)
