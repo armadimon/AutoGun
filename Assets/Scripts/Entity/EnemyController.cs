@@ -1,14 +1,26 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
+// AI의 상태를 나타내는 열거형
+public enum AIState
+{
+    Idle,       // 대기 상태
+    Move,
+    Attacking,   // 공격 상태
+}
 
 // NPC 클래스: 네비게이션, 배회, 전투 기능을 수행
-public class PlayerController : BaseController
+public class EnemyController : BaseController
 {
-    [Header("Combat")]
-    public Transform weaponPos;
-    public Transform closestEnemy;
+    
+    private float playerDistance;    // 플레이어와의 거리
+    private float defaultDetectDistance;            // 기본 감지 거리
     
 
     private void Awake()
@@ -27,11 +39,14 @@ public class PlayerController : BaseController
 
     void Start()
     {
+        defaultDetectDistance = detectDistance; // 기본 감지 거리 저장
         SetState(AIState.Idle); // 시작할 때 Idle상태로 전환
     }
 
     void Update()
     {
+        // 플레이어와의 거리 계산
+        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.player.transform.position);
 
 
         // 현재 AI 상태에 따라 동작 분기
@@ -46,6 +61,10 @@ public class PlayerController : BaseController
         }
     }
 
+    /// <summary>
+    /// AI 상태 변경 함수
+    /// </summary>
+    /// <param name="state">변경할 AI 상태</param>
     public void SetState(AIState state)
     {
         aiState = state;
@@ -69,21 +88,22 @@ public class PlayerController : BaseController
     // 플레이어 감지 및 배회 관련 업데이트
     protected override void PassiveUpdate()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
+        // 현재 위치에서 경로를 미리 계산
+        path = new NavMeshPath();
+        agent.CalculatePath(CharacterManager.Instance.player.transform.position, path);
 
-        if (colliders.Length > 0)
+        if (playerDistance < detectDistance)
         {
-                aiState = AIState.Attacking;
+            SetState(AIState.Attacking);
+            return;
+        }
+
+        if (agent.remainingDistance < 0.3f)
+        {
+            SetState(AIState.Idle);
         }
     }
 
-    void Attack()
-    {
-        float playerYRotation = transform.eulerAngles.y;
-        ProjectileManager.Instance.FireBullet(weaponPos, new Vector3(0, playerYRotation, 0));
-
-    }
-    
     // 일정 시간 후 원래 위치로 이동
     void ReturnToDefaultLocation()
     {
@@ -101,30 +121,14 @@ public class PlayerController : BaseController
 
     protected override void AttackingUpdate()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
 
-        if (colliders.Length > 0)
+        if (playerDistance > detectDistance)
         {
-            float minDistance = float.MaxValue;
-
-            foreach (Collider collider in colliders)
-            {
-                float distance = Vector3.Distance(transform.position, collider.transform.position);
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    closestEnemy = collider.transform;
-                    targetDistance = Mathf.Abs(transform.position.magnitude - closestEnemy.position.magnitude);
-                }
-            }
-
-            if (closestEnemy != null)
-            {
-                transform.LookAt(closestEnemy.transform);
-            }
+            SetState(AIState.Idle);
+            return;
         }
-        
-        if (targetDistance < attackDistance)
+
+        if (playerDistance < attackDistance)
         {
             agent.isStopped = true;
 
@@ -132,17 +136,30 @@ public class PlayerController : BaseController
             if (Time.time - lastAttackTime > attackRate)
             {
                 lastAttackTime = Time.time; // 마지막 공격 시간 갱신
+                Collider[] hit = Physics.OverlapBox(transform.position, new Vector3(1f, 1f, 1f), Quaternion.identity, layerMask);
+                if (hit.Length > 0)
+                {
+                    DealDamage();
+                }
                 animator.speed = 1f; // 애니메이션 속도 설정
-                Attack();
+                animator.SetTrigger("Attack"); // 공격 애니메이션 실행
             }
         }
         else
         {
             agent.isStopped = false;
             agent.speed = stats.Speed;
-            agent.SetDestination(closestEnemy.position);
+            animator.SetFloat("MoveSpeed", Mathf.Abs(agent.velocity.magnitude));
+            agent.SetDestination(CharacterManager.Instance.player.transform.position);
         }
     }
+
+    // 애니메이션 이벤트로 호출될 메서드
+    public void DealDamage()
+    {
+            CharacterManager.Instance.player.GetComponent<IDamageable>().TakeDamage(attackDamage);
+    }
+
 
     // 플레이어가 NPC의 시야 내에 있는지 확인
     // bool IsPlayerInFieldOfView()
@@ -186,5 +203,5 @@ public class PlayerController : BaseController
             renderer.material.color = Color.white;
         }
     }
-}
 
+}

@@ -6,7 +6,7 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    public List<Item> items = new List<Item>(); // 플레이어 인벤토리
+    // public List<Item> items = new List<Item>(); // 플레이어 인벤토리
 
     private void Awake()
     {

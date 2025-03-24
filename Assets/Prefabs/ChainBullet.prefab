@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8206011464483367828}
-  - component: {fileID: 4799362485881182801}
   - component: {fileID: 828857071034719811}
   - component: {fileID: 2583747214558709810}
+  - component: {fileID: 1977106329951013255}
   m_Layer: 0
-  m_Name: SimpleBullet
+  m_Name: ChainBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,19 +35,6 @@ Transform:
   - {fileID: 6958396887147102622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4799362485881182801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094402925649190924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 175d14747ecbd1f469af3fb92aae4ee9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletSpeed: 5
 --- !u!54 &828857071034719811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -96,6 +83,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.019999996, y: 0.06, z: 0.019999996}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1977106329951013255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094402925649190924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6bee1508f69d946b819dae0873ab84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 2
+  damage: 10
+  chainRange: 10
+  maxChains: 3
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &7771772281233480484
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum WeaponType { SubmachineGun, Shotgun, Sniper }
-public enum WeaponRarity { Common, Rare, Epic, Legendary }
+public enum WeaponRarity { Common, Rare, Epic }
 
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "Weapons/Weapon")]
 public class WeaponData : ScriptableObject
@@ -13,7 +13,7 @@ public class WeaponData : ScriptableObject
     public WeaponRarity rarity;
     public int baseDamage;
     public float fireRate;
-    public SkillData[] allSkills; // 가능한 모든 스킬 (최대 3개)
+    public ISkill[] allSkills; // 가능한 모든 스킬 (최대 3개)
 
     public int GetDamageByLevel(int level)
     {
@@ -21,12 +21,11 @@ public class WeaponData : ScriptableObject
         return Mathf.RoundToInt(baseDamage * rarityMultiplier * (1 + level * 0.1f));
     }
 
-    public SkillData GetUnlockedSkill(int level)
+    public ISkill GetUnlockedSkill(int level)
     {
         if (level >= 7) return allSkills[2];
         if (level >= 5) return allSkills[1];
         if (level >= 3) return allSkills[0];
         return null;
     }
-}
 }

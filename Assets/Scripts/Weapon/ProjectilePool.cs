@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class ProjectilePool : MonoBehaviour
 {
-    public static ProjectilePool Instance;
-
     public GameObject projectilePrefab;
     public Transform projectileParent;
     public int poolSize = 50;
 
     private Queue<GameObject> pool = new Queue<GameObject>();
-
-    void Awake()
-    {
-        Instance = this;
-    }
 
     void Start()
     {

@@ -37,7 +37,6 @@ public class ResourceController : MonoBehaviour
         CurrentHealth = CurrentHealth > MaxHealth ? MaxHealth : CurrentHealth;
         CurrentHealth = CurrentHealth < 0 ? 0 : CurrentHealth;
         
-        Debug.Log("Current Health: " + CurrentHealth);
         if (CurrentHealth <= 0f)
         {
             Death();

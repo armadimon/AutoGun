@@ -1,28 +1,15 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
-// AI의 상태를 나타내는 열거형
-public enum AIState
-{
-    Idle,       // 대기 상태
-    Move,
-    Attacking,   // 공격 상태
-}
 
 // NPC 클래스: 네비게이션, 배회, 전투 기능을 수행
-public class EnemyController : BaseController
+public class PlayerController : BaseController
 {
+    [Header("Combat")]
+    public Transform weaponPos;
+    public Transform closestEnemy;
     
-    private float playerDistance;    // 플레이어와의 거리
-    private float defaultDetectDistance;            // 기본 감지 거리
-    
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();           // 네비게이션 에이전트 가져오기
@@ -39,14 +26,11 @@ public class EnemyController : BaseController
 
     void Start()
     {
-        defaultDetectDistance = detectDistance; // 기본 감지 거리 저장
         SetState(AIState.Idle); // 시작할 때 Idle상태로 전환
     }
 
     void Update()
     {
-        // 플레이어와의 거리 계산
-        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.player.transform.position);
 
 
         // 현재 AI 상태에 따라 동작 분기
@@ -61,10 +45,6 @@ public class EnemyController : BaseController
         }
     }
 
-    /// <summary>
-    /// AI 상태 변경 함수
-    /// </summary>
-    /// <param name="state">변경할 AI 상태</param>
     public void SetState(AIState state)
     {
         aiState = state;
@@ -88,22 +68,21 @@ public class EnemyController : BaseController
     // 플레이어 감지 및 배회 관련 업데이트
     protected override void PassiveUpdate()
     {
-        // 현재 위치에서 경로를 미리 계산
-        path = new NavMeshPath();
-        agent.CalculatePath(CharacterManager.Instance.player.transform.position, path);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
 
-        if (playerDistance < detectDistance)
+        if (colliders.Length > 0)
         {
-            SetState(AIState.Attacking);
-            return;
-        }
-
-        if (agent.remainingDistance < 0.3f)
-        {
-            SetState(AIState.Idle);
+                aiState = AIState.Attacking;
         }
     }
 
+    void Attack()
+    {
+        float playerYRotation = transform.eulerAngles.y;
+        ProjectileManager.Instance.FireBullet(weaponPos, new Vector3(0, playerYRotation, 0));
+
+    }
+    
     // 일정 시간 후 원래 위치로 이동
     void ReturnToDefaultLocation()
     {
@@ -121,14 +100,30 @@ public class EnemyController : BaseController
 
     protected override void AttackingUpdate()
     {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
 
-        if (playerDistance > detectDistance)
+        if (colliders.Length > 0)
         {
-            SetState(AIState.Idle);
-            return;
-        }
+            float minDistance = float.MaxValue;
 
-        if (playerDistance < attackDistance)
+            foreach (Collider collider in colliders)
+            {
+                float distance = Vector3.Distance(transform.position, collider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestEnemy = collider.transform;
+                    targetDistance = Mathf.Abs(transform.position.magnitude - closestEnemy.position.magnitude);
+                }
+            }
+
+            if (closestEnemy != null)
+            {
+                transform.LookAt(closestEnemy.transform);
+            }
+        }
+        
+        if (targetDistance < attackDistance)
         {
             agent.isStopped = true;
 
@@ -137,32 +132,16 @@ public class EnemyController : BaseController
             {
                 lastAttackTime = Time.time; // 마지막 공격 시간 갱신
                 animator.speed = 1f; // 애니메이션 속도 설정
-                animator.SetTrigger("Attack"); // 공격 애니메이션 실행
+                Attack();
             }
         }
         else
         {
             agent.isStopped = false;
             agent.speed = stats.Speed;
-            animator.SetFloat("MoveSpeed", Mathf.Abs(agent.velocity.magnitude));
-            agent.SetDestination(CharacterManager.Instance.player.transform.position);
+            agent.SetDestination(closestEnemy.position);
         }
     }
-
-    // 애니메이션 이벤트로 호출될 메서드
-    public void DealDamage()
-    {
-            CharacterManager.Instance.player.GetComponent<IDamageable>().TakeDamage(attackDamage);
-    }
-
-
-    // 플레이어가 NPC의 시야 내에 있는지 확인
-    // bool IsPlayerInFieldOfView()
-    // {
-    //     Vector3 directionToPlayer = CharacterManager.Instance.player.transform.position - transform.position;
-    //     float angle = Vector3.Angle(transform.forward, directionToPlayer);
-    //     return angle < fieldOfView * 0.5f;
-    // }
 
     // 데미지를 받았을 때 처리
     public void TakeDamage(float damage)
@@ -198,5 +177,5 @@ public class EnemyController : BaseController
             renderer.material.color = Color.white;
         }
     }
-
 }
+
