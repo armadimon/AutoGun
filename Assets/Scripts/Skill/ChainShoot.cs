@@ -22,10 +22,7 @@ public class ChainShoot : MonoBehaviour, ISkill
 
     public void Activate()
     {
-        if (currentBullet == 0)
-        {
-            StartAttack(); // 공격 시작
-        }
+        StartAttack(); // 공격 시작
     }
 
     private void StartAttack()

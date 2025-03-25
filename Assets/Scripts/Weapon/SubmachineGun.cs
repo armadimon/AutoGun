@@ -26,7 +26,6 @@ public class SubmachineGun : Weapon
             Debug.Log("ISkill component found!");
             data.allSkills[0] = temp;  // 스킬 할당
             Debug.Log(data.allSkills[0].SkillIcon);
-            InventoryManager.Instance.EquipWeapon(data);
         }
     }
 }

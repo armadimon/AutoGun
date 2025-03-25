@@ -8,6 +8,7 @@ public class PlayerController : BaseController
 {
     [Header("Combat")]
     public Transform weaponPos;
+    public Weapon currentWeapon;
     public Transform closestEnemy;
     
     private void Awake()
@@ -26,6 +27,10 @@ public class PlayerController : BaseController
 
     void Start()
     {
+        if (InventoryManager.Instance.equippedWeapon != null)
+        {
+            InventoryManager.Instance.EquipWeapon(InventoryManager.Instance.equippedWeapon);
+        }
         SetState(AIState.Idle); // 시작할 때 Idle상태로 전환
     }
 

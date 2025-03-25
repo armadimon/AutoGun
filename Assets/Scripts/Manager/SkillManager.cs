@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,12 @@ public class SkillManager : MonoBehaviour
     public Weapon equippedWeapon; // 현재 장착 중인 무기
     public Image[] skillIcons; // 3개의 스킬 UI 슬롯
     private float[] skillCooldowns = new float[3]; // 각 스킬의 남은 쿨타임
+
+    private void Start()
+    {
+        if (InventoryManager.Instance.currentWeapon != null)
+            UpdateSkillUI(InventoryManager.Instance.currentWeapon.data);
+    }
 
     void Update()
     {
@@ -19,6 +26,7 @@ public class SkillManager : MonoBehaviour
 
     public void UseSkill(int skillIndex)
     {
+        equippedWeapon = CharacterManager.Instance.player.currentWeapon;
         if (equippedWeapon == null || equippedWeapon.data.allSkills[skillIndex] == null)
             return;
 
@@ -29,8 +37,6 @@ public class SkillManager : MonoBehaviour
             Debug.Log($"{skillIndex} 사용 불가! 남은 쿨타임: {skillCooldowns[skillIndex]:F1}초");
             return;
         }
-
-        Debug.Log($"{skillIndex} 사용!");
 
         skill.Activate();
         skillCooldowns[skillIndex] = skill.CoolDown; // 쿨타임 적용
@@ -57,19 +63,20 @@ public class SkillManager : MonoBehaviour
         InventoryManager.OnWeaponChanged -= UpdateSkillUI; // 이벤트 해제
     }
 
-    private void UpdateSkillUI(WeaponData weapon)
+    private void UpdateSkillUI(EquipmentData weapondata)
     {
-        Debug.Log(skillIcons.Length);
-        for (int i = 0; i < 1; i++)
-        // for (int i = 0; i < skillIcons.Length; i++)
+        if (weapondata.equipmentType == EquipmentType.Weapon)
         {
-            if (weapon.allSkills[i].SkillIcon != null)
+            for (int i = 0; i < weapondata.skillData.Length; i++)
             {
-                skillIcons[i].sprite = weapon.allSkills[i].SkillIcon;
-            }
-            else
-            {
-                // skillIcons[i].gameObject.SetActive(false); // 스킬이 없으면 숨김
+                if (weapondata.skillData[i].skillIcon != null)
+                {
+                    skillIcons[i].sprite = weapondata.skillData[i].skillIcon;
+                }
+                else
+                {
+                    skillIcons[i].gameObject.SetActive(false); // 스킬이 없으면 숨김
+                }
             }
         }
     }
