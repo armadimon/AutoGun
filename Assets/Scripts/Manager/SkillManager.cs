@@ -65,6 +65,7 @@ public class SkillManager : MonoBehaviour
 
     private void UpdateSkillUI(EquipmentData weapondata)
     {
+        Debug.Log(weapondata.skillData.Length);
         if (weapondata.equipmentType == EquipmentType.Weapon)
         {
             for (int i = 0; i < weapondata.skillData.Length; i++)

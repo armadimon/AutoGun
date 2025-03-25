@@ -17,11 +17,22 @@ public class ProjectileManager : MonoBehaviour
     public void FireBullet(Transform firePoint, Vector3 bulletRotation)
     {
         
-        GameObject projectile = projectilePool.GetProjectile(firePoint, bulletRotation);
+        GameObject obj = projectilePool.GetProjectile(firePoint, bulletRotation);
+        Projectile projectile = obj.GetComponent<Projectile>();
+        if (projectile != null)
+        {
+            projectile.SetDamage(CharacterManager.Instance.player.currentWeapon.data.GetPowerByLevel());
+        }
     }
     
     public void FireChainBullet(Transform firePoint, Vector3 bulletRotation)
     {
         GameObject chainProjectile = chainProjectilePool.GetProjectile(firePoint, bulletRotation);
+        GameObject obj = projectilePool.GetProjectile(firePoint, bulletRotation);
+        ChainAttackProjectile projectile = obj.GetComponent<ChainAttackProjectile>();
+        if (projectile != null)
+        {
+            projectile.SetDamage(CharacterManager.Instance.player.currentWeapon.data.GetPowerByLevel());
+        }
     }
 }

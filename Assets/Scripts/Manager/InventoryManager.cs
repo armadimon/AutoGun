@@ -7,23 +7,35 @@ using UnityEngine.TextCore.Text;
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
+    
+    [Header("UI component")]
+    public GameObject backgroundPanel;
     public GameObject inventoryMenu;
     public GameObject equipmentMenu;
     public Transform equipmentMenuContent;
     public GameObject usableMenu;
     public Transform usableMenuContent;
     public ItemInfoBG infoBG;
+    
+    
+    [Header("Equipment UI")]
     public EquipmentData equippedWeapon;
     public EquipmentData equippedArmor;
-    
-    
     public ItemEquipmentPrefab currentWeaponDisplay;
     public ItemEquipmentPrefab currentArmorDisplay;
+    
     public ItemEquipmentPrefab itemEquipmentPrefab;
+    public ItemUsablePrefab itemUsablePrefab;
+
+    public HealPotion tempItem;
+    
+    public ItemData selectedItem;
     
     public List<ItemEquipmentPrefab> equipmentInventory = new List<ItemEquipmentPrefab>();
     public List<ItemUsablePrefab> usableInventory = new List<ItemUsablePrefab>();
     
+    
+    private int _selectedItemIndex = 0;
     public static Action<EquipmentData> OnWeaponChanged; // 무기 변경 이벤트
 
     // 무기 장착 UI
@@ -47,7 +59,8 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        AddEquipment(currentWeapon.data);
+        AddItem(currentWeapon.data);
+        AddItem(tempItem.ItemData);
         equippedWeapon = currentWeapon.data;
     }
 
@@ -78,31 +91,57 @@ public class InventoryManager : MonoBehaviour
             ItemEquipmentPrefab equipmentItem = Instantiate(itemEquipmentPrefab, equipmentMenuContent);
             equipmentItem.SetData(item as EquipmentData);
             equipmentInventory.Add(equipmentItem);
+            Debug.Log($"Equipment 인벤토리에 {item.itemName} 추가됨");
         }
         else if (item.itemType == ItemType.Usable)
         {   
-            ItemEquipmentPrefab equipmentItem = Instantiate(itemEquipmentPrefab, equipmentMenuContent);
-            equipmentItem.SetData(item);
-            usableInventory.Add(item as UsableData);
-        }
+            ItemUsablePrefab existingItem = usableInventory.Find(u => u.itemName == item.itemName);
 
-        Debug.Log($"인벤토리에 {item.itemName} 추가됨");
+            if (existingItem != null)
+            {
+                Debug.Log($"이미 인벤토리에 존재: {item.itemName}, 수량 증가");
+                existingItem.quantity++;
+                existingItem.UpdateUI();
+            }
+            else
+            {
+                ItemUsablePrefab usableItem = Instantiate(itemUsablePrefab, usableMenuContent);
+                usableItem.SetData(item);
+                usableInventory.Add(usableItem);
+                Debug.Log($"Usable 인벤토리에 {item.itemName} 추가됨");
+            }
+        }
+    }
+
+    public void OnUseButton()
+    {
+        Usable usable = selectedItem.usablePrefab.gameObject.GetComponent<Usable>();
+        if (usable != null)
+        {
+            usable.UseItem();
+        }
     }
     
     //--------------------------------------------------------------------
     //Utility
     
     // 장비 아이템 셀렉트시
-    public void SelectItem(EquipmentData equipmentData)
-    {
-        infoBG.SetItemData(equipmentData);
-    }
+
 
     
     // 소비 아이템 셀렉트시
     public void SelectItem(ItemData itemData)
     {
-        infoBG.SetItemData(itemData);
+        if (itemData.itemType == ItemType.Equipment)
+        {
+            infoBG.SetEquipItemData(itemData as EquipmentData);
+            
+        }
+        else if (itemData.itemType == ItemType.Usable)
+        {
+            infoBG.SetUsableItemData(itemData);
+        }
+        selectedItem = itemData;
     }
     
     public void UnequipWeapon()
@@ -114,6 +153,7 @@ public class InventoryManager : MonoBehaviour
     public void InventoryToggle()
     {
         inventoryMenu.SetActive(!inventoryMenu.activeSelf);
+        backgroundPanel.SetActive(!backgroundPanel.activeSelf);
         infoBG.ClearItemData();
     }
 

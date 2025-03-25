@@ -15,28 +15,29 @@ public class ItemInfoBG : MonoBehaviour
     public Button equipButton;
     
     // BuildObject 데이터를 받아 UI를 업데이트하는 함수
-    public void SetItemData(EquipmentData itemData)
+    public void SetEquipItemData(EquipmentData itemData)
     {
         // 나머지 정보 업데이트
         // selectedItemIcon.sprite = itemData.icon;
         selectedItemName.text = itemData.itemName;
         selectedItemDescription.text = itemData.description;
 
-        upgradeButton.enabled = true;
-        equipButton.enabled = true;
-        useButton.enabled = false;
+        upgradeButton.gameObject.SetActive(true);
+        equipButton.gameObject.SetActive(true);
+        useButton.gameObject.SetActive(false);
     }
     
-    public void SetItemData(ItemData itemData)
+    public void SetUsableItemData(ItemData itemData)
     {
         // 나머지 정보 업데이트
         // selectedItemIcon.sprite = itemData.icon;
+        Debug.Log("Usable Set");
         selectedItemName.text = itemData.name;
         selectedItemDescription.text = itemData.description;
         
-        upgradeButton.enabled = false;
-        equipButton.enabled = false;
-        useButton.enabled = true;
+        upgradeButton.gameObject.SetActive(false);
+        equipButton.gameObject.SetActive(false);
+        useButton.gameObject.SetActive(true);
     }
 
     public void ClearItemData()
@@ -44,8 +45,8 @@ public class ItemInfoBG : MonoBehaviour
         // selectedItemIcon.sprite = null;
         selectedItemName.text = "";
         selectedItemDescription.text = "";
-        upgradeButton.enabled = false;
-        equipButton.enabled = false;
-        useButton.enabled = false;
+        upgradeButton.gameObject.SetActive(false);
+        equipButton.gameObject.SetActive(false);
+        useButton.gameObject.SetActive(false);
     }
 }

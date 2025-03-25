@@ -6,6 +6,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float bulletSpeed = 2f;
+    public float damage = 10f;
 
     private void Update()
     {
@@ -17,15 +18,14 @@ public class Projectile : MonoBehaviour
         transform.position += transform.forward * (Time.deltaTime * bulletSpeed);
     }
 
-    // private void OnCollisionEnter(Collision other)
-    // {
-    //     other.gameObject.GetComponent<ResourceController>()?.ChangeHealth(-10);
-    //     ProjectileManager.Instance.projectilePool.ReturnProjectile(this.gameObject);
-    // }
+    public void SetDamage(float damage)
+    {
+        this.damage = damage;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.GetComponent<ResourceController>()?.ChangeHealth(-10);
+        other.gameObject.GetComponent<ResourceController>()?.ChangeHealth(-damage);
         ProjectileManager.Instance.projectilePool.ReturnProjectile(this.gameObject);
     }
 }

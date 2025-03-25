@@ -14,6 +14,7 @@ public class EquipmentData : ItemData
     public GameObject equipmentPrefab;
     public EquipmentRarity rarity;
     public int baseValue; // 무기: 공격력, 방어구: 방어력
+    public int level;
 
     // 무기 전용 속성
     public WeaponType weaponType;
@@ -21,10 +22,10 @@ public class EquipmentData : ItemData
     public ISkill[] allSkills; // 무기일 때만 사용
     public SkillData[] skillData;
 
-    public int GetPowerByLevel(int level)
+    public float GetPowerByLevel()
     {
         float rarityMultiplier = 1 + ((int)rarity * 0.2f);
-        return Mathf.RoundToInt(baseValue * rarityMultiplier * (1 + level * 0.1f));
+        return baseValue * rarityMultiplier * (1 + level * 0.2f);
     }
 
     public ISkill GetUnlockedSkill(int level)

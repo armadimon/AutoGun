@@ -9,7 +9,7 @@ using UnityEngine;
 public class ChainAttackProjectile : MonoBehaviour
 {
     public float bulletSpeed = 5f;         // 탄환 이동 속도 (이동 애니메이션에 사용)
-    public int damage = 10;                // 기본 데미지
+    public float damage = 10;                // 기본 데미지
     public float chainRange = 10f;         // 체인 어택 범위
     public int maxChains = 3;              // 최대 체인 횟수
     public LayerMask layerMask;            // 적 레이어 마스크
@@ -22,6 +22,11 @@ public class ChainAttackProjectile : MonoBehaviour
         transform.position += transform.forward * (Time.deltaTime * bulletSpeed);
     }
 
+    public void SetDamage(float damage)
+    {
+        this.damage = damage;
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         // 적 레이어인지 체크

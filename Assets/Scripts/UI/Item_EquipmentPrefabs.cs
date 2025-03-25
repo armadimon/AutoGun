@@ -23,10 +23,12 @@ public class ItemEquipmentPrefab : MonoBehaviour
     
     public void SetData(EquipmentData newEquipment)
     {
+        Debug.Log("newEq" + newEquipment);
         icon.sprite = newEquipment.icon;
         equipmentData = newEquipment;
         value.text = newEquipment.baseValue.ToString();
-        selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(newEquipment));
+        if (selectButton != null)
+            selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(newEquipment));
     }
 
     public void ClearData()
