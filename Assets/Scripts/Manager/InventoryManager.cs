@@ -37,7 +37,7 @@ public class InventoryManager : MonoBehaviour
     public List<ItemUsablePrefab> usableInventory = new List<ItemUsablePrefab>();
     
     
-    private int _selectedItemIndex = 0;
+    private ItemEquipmentPrefab _selectedItemUI;
     public static Action<EquipmentData> OnWeaponChanged; // 무기 변경 이벤트
 
     // 무기 장착 UI
@@ -70,22 +70,20 @@ public class InventoryManager : MonoBehaviour
 
     public void EquipWeapon(EquipmentData newWeapon)
     {
-        if (newWeapon.equipmentType == EquipmentType.Weapon && equippedWeapon != null)
-        {
-            UnequipWeapon();
-        }
-
         if (CharacterManager.Instance != null)
         {
             GameObject tempIntance = Instantiate(newWeapon.equipmentPrefab, CharacterManager.Instance.player.weaponPos);
             Weapon weaponIntance = tempIntance.gameObject.GetComponent<Weapon>();
             if (weaponIntance != null)
             {
+                Debug.Log("Check");
                 if (CharacterManager.Instance.player.currentWeapon != null)
                     Destroy(CharacterManager.Instance.player.currentWeapon.gameObject);
+                currentWeapon = weaponIntance;
                 CharacterManager.Instance.player.currentWeapon = weaponIntance;
             }
         }
+        equippedWeapon = newWeapon;
         currentWeaponDisplay.SetData(newWeapon);
         OnWeaponChanged?.Invoke(newWeapon);
     }
@@ -140,6 +138,23 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
+    public void OnUpgradeButton()
+    {
+        if (selectedItem is EquipmentData equippedItemData)
+        {
+            if (GoldAmount >= 100)
+            {
+                _selectedItemUI.SetData(equippedItemData);
+                GoldAmount -= 100;
+                equippedItemData.level++;
+            }
+            else
+            {
+                Debug.Log("골드가 부족합니다! : " + GoldAmount);
+            }
+        }
+    }
     
     public void OnUseButton()
     {
@@ -158,7 +173,7 @@ public class InventoryManager : MonoBehaviour
 
     
     // 소비 아이템 셀렉트시
-    public void SelectItem(ItemData itemData)
+    public void SelectItem(ItemEquipmentPrefab equipmentUIPrefab, ItemData itemData)
     {
         if (itemData.itemType == ItemType.Equipment)
         {
@@ -169,12 +184,14 @@ public class InventoryManager : MonoBehaviour
         {
             infoBG.SetUsableItemData(itemData);
         }
+        _selectedItemUI = equipmentUIPrefab;
         selectedItem = itemData;
     }
     
     public void UnequipWeapon()
     {
         currentWeaponDisplay.ClearData();
+        currentWeapon = null;
         equippedWeapon = null;
     }
 

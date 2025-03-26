@@ -27,15 +27,4 @@ public class EquipmentData : ItemData
         float rarityMultiplier = 1 + ((int)rarity * 0.2f);
         return baseValue * rarityMultiplier * (1 + level * 0.2f);
     }
-
-    public ISkill GetUnlockedSkill(int level)
-    {
-        if (equipmentType == EquipmentType.Weapon && allSkills != null)
-        {
-            if (level >= 10) return allSkills.Length > 2 ? allSkills[2] : null;
-            if (level >= 5) return allSkills.Length > 1 ? allSkills[1] : null;
-            if (level >= 1) return allSkills.Length > 0 ? allSkills[0] : null;
-        }
-        return null;
-    }
 }

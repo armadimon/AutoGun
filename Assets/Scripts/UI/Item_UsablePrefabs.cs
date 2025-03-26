@@ -36,7 +36,7 @@ public class ItemUsablePrefab : MonoBehaviour
         itemName = newItem.itemName;
         icon.sprite = newItem.icon;
         UsableItem = newItem;
-        selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(newItem));
+        selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(null, newItem));
     }
 
     public void ClearData()

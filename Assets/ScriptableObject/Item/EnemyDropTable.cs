@@ -15,13 +15,17 @@ public class EnemyDropTable : ScriptableObject
     public int dropGoldAmount;
     public ItemData GetDroppedItem()
     {
-        float roll = Random.Range(0f, 100f);
-        float cumulativeChance = 0f;
-        Debug.Log(roll);
+        float totalChance = 0f;
         foreach (var drop in dropItems)
         {
-            cumulativeChance += drop.dropChance;
-            if (roll <= cumulativeChance)
+            totalChance += drop.dropChance;
+        }
+
+        float roll = Random.Range(0f, totalChance);
+        foreach (var drop in dropItems)
+        {
+            roll -= drop.dropChance;
+            if (roll <= 0)
             {
                 return drop.item;
             }

@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 6279693328188821494}
   - component: {fileID: 7318611093804708227}
   m_Layer: 5
-  m_Name: ItemGrade
+  m_Name: ItemLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,6 +518,7 @@ MonoBehaviour:
   icon: {fileID: 667541238588960667}
   infoBG: {fileID: 0}
   value: {fileID: 2970162889919031120}
+  level: {fileID: 7318611093804708227}
   selectButton: {fileID: 4193300549203139618}
   equipmentData: {fileID: 0}
   index: 0

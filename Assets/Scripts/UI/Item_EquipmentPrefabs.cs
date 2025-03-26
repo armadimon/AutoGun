@@ -10,6 +10,7 @@ public class ItemEquipmentPrefab : MonoBehaviour
     public Image icon;
     public ItemInfoBG infoBG;
     public TextMeshProUGUI value;
+    public TextMeshProUGUI level;
     public Button selectButton;
     public EquipmentData equipmentData;
     // public BuildObject buildObject;
@@ -27,8 +28,9 @@ public class ItemEquipmentPrefab : MonoBehaviour
         icon.sprite = newEquipment.icon;
         equipmentData = newEquipment;
         value.text = newEquipment.baseValue.ToString();
+        level.text = newEquipment.level.ToString();
         if (selectButton != null)
-            selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(newEquipment));
+            selectButton.onClick.AddListener(() => InventoryManager.Instance.SelectItem(this, newEquipment));
     }
 
     public void ClearData()
