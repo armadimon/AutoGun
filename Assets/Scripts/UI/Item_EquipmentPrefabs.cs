@@ -13,12 +13,10 @@ public class ItemEquipmentPrefab : MonoBehaviour
     public TextMeshProUGUI level;
     public Button selectButton;
     public EquipmentData equipmentData;
-    // public BuildObject buildObject;
     public int index;
 
     private void Start()
     {
-        // infoBG = GameObject.Find("BuildInfoBG").gameObject;
         infoBG = InventoryManager.Instance.infoBG;
     }
     
@@ -40,43 +38,5 @@ public class ItemEquipmentPrefab : MonoBehaviour
         value.text = "";
     }
     
-    // public void SetInfoBG()
-    // {
-        // SetItemDiscriptionPosition();
-        // infoBG.SetItemData(equipmentData);
-    // }
-    // void SetItemDiscriptionPosition()
-    // {
-    //     Vector3 mousePos = Input.mousePosition;
-    //     RectTransform rectDescrition = infoBG.GetComponent<RectTransform>();
-    //
-    //     float offsetX = rectDescrition.rect.width / 2;
-    //     float offsetY = rectDescrition.rect.height / 2;
-    //
-    //     mousePos.x += offsetX + 20;
-    //     for (int i = 0; i < 3; i++)
-    //     {
-    //         if (mousePos.y - offsetY < 0)
-    //         {
-    //             mousePos.y += offsetY / 2;
-    //         }
-    //         else if (mousePos.y + offsetY > Screen.height)
-    //         {
-    //             mousePos.y -= offsetY / 2;
-    //         }
-    //     }
-    //     infoBG.transform.position = mousePos;
-    // }
-    //
-    //
-    // public void OnPointerEnter(PointerEventData eventData)
-    // {
-    //     infoBG.gameObject.SetActive(true);
-    //     SetInfoBG();
-    // }
-    //
-    // public void OnPointerExit(PointerEventData eventData)
-    // {
-    //     infoBG.gameObject.SetActive(false);
-    // }
+
 }

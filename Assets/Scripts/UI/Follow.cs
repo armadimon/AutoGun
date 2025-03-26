@@ -8,11 +8,11 @@ public class Follow : MonoBehaviour
 
     void Start()
     {
-        initialRotation = transform.rotation; // 초기 회전값 저장
+        initialRotation = transform.rotation;
     }
 
     void LateUpdate()
     {
-        transform.rotation = initialRotation; // 처음 회전값 유지 (회전 방지)
+        transform.rotation = initialRotation;
     }
 }

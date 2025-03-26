@@ -133,8 +133,8 @@ public class PlayerController : BaseController
                 // 공격 가능 시간인지 체크
                 if (Time.time - lastAttackTime > attackRate)
                 {
-                    lastAttackTime = Time.time; // 마지막 공격 시간 갱신
-                    animator.speed = 1f; // 애니메이션 속도 설정
+                    lastAttackTime = Time.time;
+                    animator.speed = 1f;
                     Attack();
                 }
             }

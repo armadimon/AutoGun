@@ -58,7 +58,7 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(spawnInterval); // 3초 대기 후 다시 소환
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 

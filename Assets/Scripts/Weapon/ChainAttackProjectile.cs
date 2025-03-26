@@ -8,14 +8,14 @@ using UnityEngine;
 
 public class ChainAttackProjectile : MonoBehaviour
 {
-    public float bulletSpeed = 5f;         // 탄환 이동 속도 (이동 애니메이션에 사용)
-    public float damage = 10;                // 기본 데미지
-    public float chainRange = 10f;         // 체인 어택 범위
-    public int maxChains = 3;              // 최대 체인 횟수
-    public LayerMask layerMask;            // 적 레이어 마스크
+    public float bulletSpeed = 5f;
+    public float damage = 10;
+    public float chainRange = 10f;
+    public int maxChains = 3; 
+    public LayerMask layerMask;
 
     private int chainCount = 0;            // 진행된 체인 횟수
-    private bool isChaining = false;       // 체인 공격 진행 여부
+    private bool isChaining = false;
 
     private void Update()
     {
@@ -29,13 +29,11 @@ public class ChainAttackProjectile : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        // 적 레이어인지 체크
         if (((1 << other.gameObject.layer) & layerMask.value) != 0)
         {
 
             isChaining = ChainAttack(other);
             ApplyDamage(other.gameObject);
-            // 체인 공격이 이미 진행 중이면 무시 (한 번만 시작)
             if (!isChaining)
             {
                 gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -48,7 +46,6 @@ public class ChainAttackProjectile : MonoBehaviour
         }
     }
 
-    // 지정된 타겟에게 데미지를 적용하는 함수
     private void ApplyDamage(GameObject target)
     {
         var enemy = target.GetComponent<BaseController>();
@@ -58,16 +55,13 @@ public class ChainAttackProjectile : MonoBehaviour
         }
     }
 
-    // 체인 어택을 진행하는 코루틴
     private bool ChainAttack(Collider other)
     {
-            // 현재 위치를 기준으로 체인 범위 내의 적 검색
             Vector3 currentPosition = other.gameObject.transform.position;
             Collider[] colliders = Physics.OverlapSphere(currentPosition, chainRange, layerMask);
             GameObject nextTarget = null;
             float closestDistance = Mathf.Infinity;
-
-            // 가장 가까운 타겟을 찾는다 (첫 번째 타겟만 제외)
+            
             foreach (Collider col in colliders)
             {
                 if (col.gameObject == other.gameObject)

@@ -14,10 +14,8 @@ public class ItemInfoBG : MonoBehaviour
     public Button useButton;
     public Button equipButton;
     
-    // BuildObject 데이터를 받아 UI를 업데이트하는 함수
     public void SetEquipItemData(EquipmentData itemData)
     {
-        // 나머지 정보 업데이트
         // selectedItemIcon.sprite = itemData.icon;
         selectedItemName.text = itemData.itemName;
         selectedItemDescription.text = itemData.description;
@@ -29,7 +27,6 @@ public class ItemInfoBG : MonoBehaviour
     
     public void SetUsableItemData(ItemData itemData)
     {
-        // 나머지 정보 업데이트
         // selectedItemIcon.sprite = itemData.icon;
         Debug.Log("Usable Set");
         selectedItemName.text = itemData.name;

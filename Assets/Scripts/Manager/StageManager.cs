@@ -53,7 +53,7 @@ using UnityEngine;
 
         private void ApplyStageSettings()
         {
-            // 난이도에 따라 적 종류, 목표 수, 보상을 설정
+            // 난이도에 따라 적 종류, 목표 수, 보상 설정
             Debug.Log($"Stage: {currentStage.stageName}, Difficulty: {currentStage.difficulty}");
             enemySpawner.SpawnEnemies(currentStage.enemyCount);
             enemySpawner.difficulty = currentStage.difficulty;

@@ -7,20 +7,18 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-// AI의 상태를 나타내는 열거형
 public enum AIState
 {
-    Idle,       // 대기 상태
+    Idle,
     Move,
-    Attacking,   // 공격 상태
+    Attacking,
 }
 
-// NPC 클래스: 네비게이션, 배회, 전투 기능을 수행
 public class EnemyController : BaseController
 {
     
-    private float playerDistance;    // 플레이어와의 거리
-    private float defaultDetectDistance;            // 기본 감지 거리
+    private float playerDistance; 
+    private float defaultDetectDistance;
     public EnemyDropTable dropTable;
     public event Action OnDeath;
     private void Awake()
@@ -65,11 +63,11 @@ public class EnemyController : BaseController
         {
             case AIState.Idle:
                 agent.speed = stats.Speed;
-                agent.isStopped = true; // 이동 중지
+                agent.isStopped = true;
                 break;
             case AIState.Attacking:
                 agent.speed = stats.Speed;
-                agent.isStopped = true; // 공격 시 이동 정지
+                agent.isStopped = true;
                 break;
         }
         
@@ -77,7 +75,6 @@ public class EnemyController : BaseController
 
     protected override void PassiveUpdate()
     {
-        // 현재 위치에서 경로를 미리 계산
         path = new NavMeshPath();
         agent.CalculatePath(CharacterManager.Instance.player.transform.position, path);
 
@@ -93,7 +90,6 @@ public class EnemyController : BaseController
         }
     }
 
-    // 일정 시간 후 원래 위치로 이동
     void ReturnToDefaultLocation()
     {
         agent.SetDestination(defaultPos);
@@ -112,17 +108,16 @@ public class EnemyController : BaseController
         {
             agent.isStopped = true;
 
-            // 공격 가능 시간인지 체크
             if (Time.time - lastAttackTime > attackRate)
             {
-                lastAttackTime = Time.time; // 마지막 공격 시간 갱신
+                lastAttackTime = Time.time;
                 Collider[] hit = Physics.OverlapBox(transform.position, new Vector3(1f, 1f, 1f), Quaternion.identity, layerMask);
                 if (hit.Length > 0)
                 {
                     DealDamage();
                 }
-                animator.speed = 1f; // 애니메이션 속도 설정
-                animator.SetTrigger("Attack"); // 공격 애니메이션 실행
+                animator.speed = 1f;
+                animator.SetTrigger("Attack");
             }
         }
         else
@@ -149,7 +144,7 @@ public class EnemyController : BaseController
             Die();
         }
 
-        StartCoroutine(DamageFlash()); // 피격 효과
+        StartCoroutine(DamageFlash());
     }
 
     // 사망 처리
@@ -174,13 +169,11 @@ public class EnemyController : BaseController
     // 피격 시 빨갛게 변했다가 다시 원래 색으로 복귀
     IEnumerator DamageFlash()
     {
-        // 모든 스킨 메쉬 렌더러에 대해 색상 변경
         foreach (var renderer in meshRenderers)
         {
-            renderer.material.color = new Color(1.0f, 0.6f, 0.6f);  // 빨갛게 변경
+            renderer.material.color = new Color(1.0f, 0.6f, 0.6f);
         }
         yield return new WaitForSeconds(0.1f);
-        // 원래 색상으로 변경
         foreach (var renderer in meshRenderers)
         {
             renderer.material.color = Color.white;

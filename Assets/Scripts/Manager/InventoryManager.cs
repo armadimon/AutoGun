@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 씬 변경 시에도 유지
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -121,7 +121,7 @@ public class InventoryManager : MonoBehaviour
     public void AddGold(int amount)
     {
         GoldAmount += amount;
-        GoldInfo.UpdateGoldUI(GoldAmount); // UI 업데이트
+        GoldInfo.UpdateGoldUI(GoldAmount);
     }
     
     public void OnEquipButton()
@@ -142,7 +142,7 @@ public class InventoryManager : MonoBehaviour
     
     public EquipmentData CreateRuntimeCopy(EquipmentData original)
     {
-        // Instantiate를 통해 SO의 복제본을 생성합니다.
+        // Instantiate를 통해 SO의 복제본을 생성
         EquipmentData runtimeCopy = Instantiate(original);
         return runtimeCopy;
     }
