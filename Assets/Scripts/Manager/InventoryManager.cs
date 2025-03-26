@@ -93,7 +93,8 @@ public class InventoryManager : MonoBehaviour
         if (item.itemType == ItemType.Equipment)
         {
             ItemEquipmentPrefab equipmentItem = Instantiate(itemEquipmentPrefab, equipmentMenuContent);
-            equipmentItem.SetData(item as EquipmentData);
+            EquipmentData copyItem = CreateRuntimeCopy(item as EquipmentData);
+            equipmentItem.SetData(copyItem);
             equipmentInventory.Add(equipmentItem);
             Debug.Log($"Equipment 인벤토리에 {item.itemName} 추가됨");
         }
@@ -138,16 +139,22 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
+    
+    public EquipmentData CreateRuntimeCopy(EquipmentData original)
+    {
+        // Instantiate를 통해 SO의 복제본을 생성합니다.
+        EquipmentData runtimeCopy = Instantiate(original);
+        return runtimeCopy;
+    }
     public void OnUpgradeButton()
     {
-        if (selectedItem is EquipmentData equippedItemData)
+        if (selectedItem is EquipmentData equipmentData)
         {
-            if (GoldAmount >= 100)
+            if (GoldAmount >= 10)
             {
-                _selectedItemUI.SetData(equippedItemData);
-                GoldAmount -= 100;
-                equippedItemData.level++;
+                _selectedItemUI.SetData(equipmentData);
+                GoldAmount -= 10;
+                equipmentData.level++;
             }
             else
             {
