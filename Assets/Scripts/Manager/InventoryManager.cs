@@ -16,6 +16,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject usableMenu;
     public Transform usableMenuContent;
     public ItemInfoBG infoBG;
+    public GoldInfo GoldInfo;
+    public int GoldAmount;
     
     
     [Header("Equipment UI")]
@@ -60,7 +62,7 @@ public class InventoryManager : MonoBehaviour
     private void Start()
     {
         AddItem(currentWeapon.data);
-        AddItem(tempItem.ItemData);
+        // AddItem(tempItem.ItemData);
         equippedWeapon = currentWeapon.data;
     }
 
@@ -78,10 +80,14 @@ public class InventoryManager : MonoBehaviour
             GameObject tempIntance = Instantiate(newWeapon.equipmentPrefab, CharacterManager.Instance.player.weaponPos);
             Weapon weaponIntance = tempIntance.gameObject.GetComponent<Weapon>();
             if (weaponIntance != null)
+            {
+                if (CharacterManager.Instance.player.currentWeapon != null)
+                    Destroy(CharacterManager.Instance.player.currentWeapon.gameObject);
                 CharacterManager.Instance.player.currentWeapon = weaponIntance;
+            }
         }
         currentWeaponDisplay.SetData(newWeapon);
-        OnWeaponChanged?.Invoke(newWeapon); // 이벤트 호출
+        OnWeaponChanged?.Invoke(newWeapon);
     }
 
     public void AddItem(ItemData item)
@@ -112,7 +118,29 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
+    
+    public void AddGold(int amount)
+    {
+        GoldAmount += amount;
+        GoldInfo.UpdateGoldUI(GoldAmount); // UI 업데이트
+    }
+    
+    public void OnEquipButton()
+    {
+        if (selectedItem is EquipmentData equippedItemData)
+        {
+            if (currentWeapon != null)
+            {
+                UnequipWeapon();
+                EquipWeapon(equippedItemData);
+            }
+            else
+            {
+                EquipWeapon(equippedItemData);
+            }
+        }
+    }
+    
     public void OnUseButton()
     {
         Usable usable = selectedItem.usablePrefab.gameObject.GetComponent<Usable>();

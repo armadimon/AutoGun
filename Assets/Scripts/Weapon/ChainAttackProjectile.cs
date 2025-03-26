@@ -51,11 +51,10 @@ public class ChainAttackProjectile : MonoBehaviour
     // 지정된 타겟에게 데미지를 적용하는 함수
     private void ApplyDamage(GameObject target)
     {
-        var enemy = target.GetComponent<ResourceController>();
+        var enemy = target.GetComponent<BaseController>();
         if (enemy != null)
         {
-            enemy.ChangeHealth(-damage);
-            Debug.Log($"ChainAttack: {target.name} hit for {damage} damage.");
+            enemy.TakeDamage(damage);
         }
     }
 

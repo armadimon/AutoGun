@@ -100,32 +100,10 @@ public abstract class BaseController : MonoBehaviour, IDamageable
     }
 
 
-    // 데미지를 받았을 때 처리
-    public void TakeDamage(float damage)
-    {
-        resourceController.ChangeHealth(-damage);
-        StartCoroutine(DamageFlash()); // 피격 효과
-    }
+    public abstract void TakeDamage(float damage);
 
-    // 사망 처리
     public void Death()
     {
         Destroy(gameObject);
-    }
-
-    // 피격 시 빨갛게 변했다가 다시 원래 색으로 복귀
-    IEnumerator DamageFlash()
-    {
-        // 모든 스킨 메쉬 렌더러에 대해 색상 변경
-        foreach (var renderer in meshRenderers)
-        {
-            renderer.material.color = new Color(1.0f, 0.6f, 0.6f);  // 빨갛게 변경
-        }
-        yield return new WaitForSeconds(0.1f);
-        // 원래 색상으로 변경
-        foreach (var renderer in meshRenderers)
-        {
-            renderer.material.color = Color.white;
-        }
     }
 }

@@ -9,7 +9,8 @@ using UnityEngine;
 
         public PlayerController playerPrefab;
         public EnemySpawner enemySpawner;
-        private StageData currentStage;
+        public StageData currentStage;
+        public GameObject clearPanel;
         public GameObject enemyPrefab;
         public Vector3 center; // 박스 중심 위치
         public Vector3 size;   // 박스 크기
@@ -31,7 +32,11 @@ using UnityEngine;
             
         }
         
-
+        public void ClearStage()
+        {
+            clearPanel.SetActive(true);
+        }
+        
         private void Start()
         {
             if (SceneLoader.SelectedStage != null)

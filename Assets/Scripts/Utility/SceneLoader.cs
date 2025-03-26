@@ -12,4 +12,9 @@ public class SceneLoader : MonoBehaviour
         SelectedStage = stageData;
         SceneManager.LoadScene("StageScene"); // 스테이지 씬으로 이동
     }
+
+    public void ReturnToStageSelectScene()
+    {
+        SceneManager.LoadScene("StageSelectScene");
+    }
 }

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
 {
-    public Weapon equippedWeapon; // 현재 장착 중인 무기
-    public Image[] skillIcons; // 3개의 스킬 UI 슬롯
-    private float[] skillCooldowns = new float[3]; // 각 스킬의 남은 쿨타임
+    public Weapon equippedWeapon;
+    public Image[] skillIcons;
+    private float[] skillCooldowns = new float[3];
 
     private void Start()
     {
@@ -39,28 +39,18 @@ public class SkillManager : MonoBehaviour
         }
 
         skill.Activate();
-        skillCooldowns[skillIndex] = skill.CoolDown; // 쿨타임 적용
+        skillCooldowns[skillIndex] = skill.CoolDown;
     }
-
-    private void ApplySkillEffect(ISkill skill)
-    {
-    }
-
-    private IEnumerator TemporaryBuff(float duration, System.Action applyEffect)
-    {
-        applyEffect();
-        yield return new WaitForSeconds(duration);
-        // 버프 제거 코드
-    }
+    
     
     private void OnEnable()
     {
-        InventoryManager.OnWeaponChanged += UpdateSkillUI; // 이벤트 등록
+        InventoryManager.OnWeaponChanged += UpdateSkillUI;
     }
 
     private void OnDisable()
     {
-        InventoryManager.OnWeaponChanged -= UpdateSkillUI; // 이벤트 해제
+        InventoryManager.OnWeaponChanged -= UpdateSkillUI;
     }
 
     private void UpdateSkillUI(EquipmentData weapondata)
@@ -76,7 +66,7 @@ public class SkillManager : MonoBehaviour
                 }
                 else
                 {
-                    skillIcons[i].gameObject.SetActive(false); // 스킬이 없으면 숨김
+                    skillIcons[i].gameObject.SetActive(false);
                 }
             }
         }

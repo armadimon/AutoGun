@@ -1,35 +1,64 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class EnemySpawner : MonoBehaviour
 {
-    public Transform[] spawnPoints; // 적이 생성될 위치들
-    public StageDifficulty difficulty; // 현재 난이도
+    public Transform[] spawnPoints;
+    public StageDifficulty difficulty;
 
     [System.Serializable]
     public class EnemyList
     {
-        public List<GameObject> enemies; // 적 프리팹 리스트
+        public List<GameObject> enemies;
     }
 
-    public EnemyList easyEnemies;   // Easy 난이도 적 리스트
-    public EnemyList normalEnemies; // Normal 난이도 적 리스트
-    public EnemyList hardEnemies;   // Hard 난이도 적 리스트
+    public EnemyList easyEnemies;
+    public EnemyList normalEnemies;
+    public EnemyList hardEnemies;
 
+    private List<GameObject> activeEnemies = new List<GameObject>();
+    private int totalSpawnedEnemies = 0;
+    private int maxEnemies;
+
+    private float spawnInterval = 3f;
+    
+    
     public void SpawnEnemies(int enemyCount)
+    {   
+        StartCoroutine(SpawnEnemiesCoroutine(enemyCount));
+    }
+    private IEnumerator SpawnEnemiesCoroutine(int enemyCount)
     {
+        maxEnemies = enemyCount;
         List<GameObject> selectedEnemies = GetEnemiesByDifficulty();
-        Debug.Log($"Selected enemies: {selectedEnemies.Count}");
-        Debug.Log($"enemies count: {enemyCount}");
-        for (int i = 0; i < enemyCount; i++)
+        if (selectedEnemies.Count == 0) yield break;
+
+        while (totalSpawnedEnemies < maxEnemies)
         {
-            if (selectedEnemies.Count == 0) return;
+            int spawnAmount = Mathf.Min(5, maxEnemies - totalSpawnedEnemies); // 한 번에 5마리씩 소환
+            for (int i = 0; i < spawnAmount; i++)
+            {
+                int enemyIndex = Random.Range(0, selectedEnemies.Count);
+                int spawnIndex = Random.Range(0, spawnPoints.Length);
 
-            int enemyIndex = Random.Range(0, selectedEnemies.Count); // 랜덤한 적 선택
-            int spawnIndex = Random.Range(0, spawnPoints.Length);    // 랜덤한 스폰 위치 선택
+                GameObject enemy = Instantiate(selectedEnemies[enemyIndex], spawnPoints[spawnIndex].position, Quaternion.identity);
+                activeEnemies.Add(enemy);
+                totalSpawnedEnemies++;
 
-            Instantiate(selectedEnemies[enemyIndex], spawnPoints[spawnIndex].position, Quaternion.identity);
+                EnemyController enemyController = enemy.GetComponent<EnemyController>();
+                if (enemyController != null)
+                {
+                    enemyController.OnDeath += () => OnEnemyDeath(enemy);
+                }
+            }
+
+            yield return new WaitForSeconds(spawnInterval); // 3초 대기 후 다시 소환
         }
     }
 
@@ -45,6 +74,16 @@ public class EnemySpawner : MonoBehaviour
                 return hardEnemies.enemies;
             default:
                 return new List<GameObject>();
+        }
+    }
+
+    private void OnEnemyDeath(GameObject enemy)
+    {
+        activeEnemies.Remove(enemy);
+
+        if (activeEnemies.Count == 0 && totalSpawnedEnemies >= maxEnemies)
+        {
+            StageManager.Instance.ClearStage();
         }
     }
 }

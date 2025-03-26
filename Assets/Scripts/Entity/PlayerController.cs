@@ -36,8 +36,6 @@ public class PlayerController : BaseController
 
     void Update()
     {
-
-
         // 현재 AI 상태에 따라 동작 분기
         switch (aiState)
         {
@@ -105,6 +103,9 @@ public class PlayerController : BaseController
 
     protected override void AttackingUpdate()
     {
+        // 무기의 어택 레이트를 가져옴
+        attackRate = currentWeapon.data.fireRate;
+        
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectDistance, layerMask);
 
         if (colliders.Length > 0)
@@ -149,10 +150,10 @@ public class PlayerController : BaseController
     }
 
     // 데미지를 받았을 때 처리
-    public void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        stats.Health -= damage;
-        if (stats.Health <= 0)
+        resourceController.ChangeHealth(-damage);
+        if (resourceController.CurrentHealth <= 0)
         {
             Die();
         }
@@ -160,10 +161,24 @@ public class PlayerController : BaseController
         StartCoroutine(DamageFlash()); // 피격 효과
     }
 
+    // private void OnEnable()
+    // {
+    //     InventoryManager.OnWeaponChanged += WeaponChange;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     InventoryManager.OnWeaponChanged -= WeaponChange;
+    // }
+    //
+    // public void WeaponChange()
+    // {
+    //     
+    // }
+    
     // 사망 처리
     void Die()
     {
-
         Destroy(gameObject);
     }
 

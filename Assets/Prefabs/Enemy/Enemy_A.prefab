@@ -1382,6 +1382,7 @@ MonoBehaviour:
   attackRate: 2
   attackDistance: 1
   resourceController: {fileID: 3980256705998366347}
+  dropTable: {fileID: 11400000, guid: 835ac271a7b913140a7b6cf892e1ff4b, type: 2}
 --- !u!114 &1045353511188362771
 MonoBehaviour:
   m_ObjectHideFlags: 0

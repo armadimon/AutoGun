@@ -12,7 +12,7 @@ public interface ISkill
     void Activate();
 }
 
-[CreateAssetMenu(fileName = "NewSkill", menuName = "Weapons/Skill")]
+[CreateAssetMenu(fileName = "NewSkill", menuName = "Skill")]
 public class SkillData : ScriptableObject
 {
     public string skillName;

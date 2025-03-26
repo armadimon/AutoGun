@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.GetComponent<ResourceController>()?.ChangeHealth(-damage);
+        other.gameObject.GetComponent<BaseController>()?.TakeDamage(damage);
         ProjectileManager.Instance.projectilePool.ReturnProjectile(this.gameObject);
     }
 }

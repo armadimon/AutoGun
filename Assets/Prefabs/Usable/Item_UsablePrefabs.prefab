@@ -381,8 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 667541238588960667}
-  quantity: {fileID: 2970162889919031120}
+  quantity: 0
+  quantityText: {fileID: 2970162889919031120}
   infoBG: {fileID: 0}
   selectButton: {fileID: 4193300549203139618}
   UsableItem: {fileID: 0}
-  index: 0
+  itemName: 
